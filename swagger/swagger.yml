@@ -6,3 +6,35 @@ info:
   version: 1.0.0
 basePath: /api/v1
 paths: {}
+definitions:
+  models.LoginRequest:
+    title: LoginRequest
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  models.RegisterRequest:
+    title: RegisterRequest
+    type: object
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+  models.SuccessResponse:
+    title: SuccessResponse
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/models.interface'
+      message:
+        type: string
+      status:
+        type: string
+  models.interface:
+    title: interface
+    type: object
