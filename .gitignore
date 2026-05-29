@@ -1,0 +1,13 @@
+# Binary
+*.exe
+
+# CSV data — runtime generated
+data/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

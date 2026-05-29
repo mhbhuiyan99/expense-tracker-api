@@ -1,0 +1,8 @@
+swagger: "2.0"
+info:
+  title: Expense Tracker API
+  description: |
+    Personal expense tracker REST API
+  version: 1.0.0
+basePath: /api/v1
+paths: {}
