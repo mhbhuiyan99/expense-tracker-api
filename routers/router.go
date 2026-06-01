@@ -8,9 +8,14 @@ package routers
 import (
 	beego "github.com/beego/beego/v2/server/web"
 	"expense-tracker-api/controllers"
+	"expense-tracker-api/filters"
 )
 
 func init() {
+	// Auth filter runs before every expense route
+	beego.InsertFilter("/api/v1/expenses/*", beego.BeforeExec, filters.AuthFilter)
+	beego.InsertFilter("/api/v1/expenses", beego.BeforeExec, filters.AuthFilter)
+
 	ns := beego.NewNamespace("/api/v1", 
 
 		// Health check
