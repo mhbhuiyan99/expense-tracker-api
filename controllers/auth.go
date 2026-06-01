@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"expense-tracker-api/models"
 	"expense-tracker-api/services"
-
-	"github.com/beego/beego/v2/core/validation"
 	"github.com/beego/beego/v2/core/logs"
 )
 
@@ -29,11 +27,7 @@ func (c *AuthController) Register() {
 		return
 	}
 
-	// validate using Beego validation
-	valid := validation.Validation{}
-	ok, _ := valid.Valid(&req)
-	if !ok {
-		c.RespondError(400, valid.Errors[0].Key+" "+valid.Errors[0].Message)
+	if !c.ValidateInput(&req) {
 		return
 	}
 
@@ -66,12 +60,10 @@ func (c *AuthController) Login() {
 		return
 	}
 
-	valid := validation.Validation{}
-	ok, _ := valid.Valid(&req)
-	if !ok {
-		c.RespondError(400, valid.Errors[0].Key+" "+valid.Errors[0].Message)
+	if !c.ValidateInput(&req) {
 		return
 	}
+
 
 	data, err := services.LoginUser(req)
 	if err != nil {

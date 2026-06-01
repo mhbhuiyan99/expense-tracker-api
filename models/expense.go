@@ -37,11 +37,11 @@ func IsValidCategory(category string) bool {
 
 // CreateExpenseRequest is the expected JSON body for creating a new expense
 type CreateExpenseRequest struct {
-	Title       string  `json:"title" valid:"Required"`
+	Title       string  `json:"title"`
 	Amount      float64 `json:"amount"`
-	Category    string  `json:"category" valid:"Required"`
+	Category    string  `json:"category"`
 	Note        string  `json:"note"`
-	ExpenseDate string  `json:"expense_date" valid:"Required;Date"`
+	ExpenseDate string  `json:"expense_date"`
 }
 
 // UpdateExpenseRequest is the expected JSON body for updating an existing expense

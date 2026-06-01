@@ -3,6 +3,8 @@ package controllers
 import (
 	beego "github.com/beego/beego/v2/server/web"
 	"expense-tracker-api/models"
+	"github.com/beego/beego/v2/core/validation"
+	"github.com/beego/beego/v2/core/logs"
 )
 
 
@@ -39,4 +41,25 @@ func (c *BaseController) RespondError (statusCode int, message string) {
 		Message: message,
 	}
 	c.ServeJSON()
+}
+
+// ValidateInput runs Beego validation on a struct and responds with 400 if invalid.
+// Returns true if validation passed, false if it failed (response already sent).
+func (c *BaseController) ValidateInput(obj interface{}) bool {
+    valid := validation.Validation{}
+    ok, err := valid.Valid(obj)
+    if err != nil {
+        logs.Error("[ValidateInput] internal error: %v", err)
+        c.RespondError(500, "Validation error")
+        return false
+    }
+    if !ok {
+        msg := "Validation failed"
+        if len(valid.Errors) > 0 {
+            msg = valid.Errors[0].Key + ": " + valid.Errors[0].Message
+        }
+        c.RespondError(400, msg)
+        return false
+    }
+    return true
 }

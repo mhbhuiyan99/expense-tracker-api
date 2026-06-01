@@ -7,6 +7,21 @@ info:
 basePath: /api/v1
 paths: {}
 definitions:
+  models.CreateExpenseRequest:
+    title: CreateExpenseRequest
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+      category:
+        type: string
+      expense_date:
+        type: string
+      note:
+        type: string
+      title:
+        type: string
   models.LoginRequest:
     title: LoginRequest
     type: object
@@ -34,6 +49,21 @@ definitions:
       message:
         type: string
       status:
+        type: string
+  models.UpdateExpenseRequest:
+    title: UpdateExpenseRequest
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+      category:
+        type: string
+      expense_date:
+        type: string
+      note:
+        type: string
+      title:
         type: string
   models.interface:
     title: interface

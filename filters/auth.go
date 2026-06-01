@@ -2,6 +2,9 @@ package filters
 
 import (
 	"github.com/beego/beego/v2/server/web/context"
+	"expense-tracker-api/models"
+	"strconv"
+	"encoding/json"
 )
 
 // AuthFilter checks that X-User-ID header is present and valid before allowing access to protected routes
