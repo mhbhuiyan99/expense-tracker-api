@@ -25,10 +25,16 @@ func (c *ExpenseController) getUserID() (int, bool) {
 
 // List handles GET /api/v1/expenses
 // @Title List Expenses
-// @Description Get all expenses for the authenticated user
+// @Description Get all expenses with optional filtering and sorting
 // @Param X-User-ID header int true "User ID"
+// @Param category query string false "Filter by category"
+// @Param date_from query string false "Filter from date (YYYY-MM-DD)"
+// @Param date_to query string false "Filter to date (YYYY-MM-DD)"
+// @Param sort_by query string false "Sort by: amount or expense_date"
+// @Param sort_order query string false "Sort order: asc or desc"
+// @Param limit query int false "Max number of results"
 // @Success 200 {object} models.SuccessResponse
-// @Failure 401 {object} models.ErrorResponse 
+// @Failure 401 {object} models.ErrorResponse
 // @router /api/v1/expenses [get]
 func (c *ExpenseController) List() {
 	userID, ok := c.getUserID()
@@ -36,12 +42,23 @@ func (c *ExpenseController) List() {
 		return
 	}
 
-	expenses, err := services.GetExpenses(userID)
+	limit, _ := c.GetInt("limit", 0)
+
+	params := services.ListExpensesParams{
+		Category:  c.GetString("category"),
+		DateFrom:  c.GetString("date_from"),
+		DateTo:    c.GetString("date_to"),
+		SortBy:    c.GetString("sort_by"),
+		SortOrder: c.GetString("sort_order"),
+		Limit:     limit,
+	}
+
+	expenses, err := services.GetExpenses(userID, params)
 	if err != nil {
 		logs.Error("[List] %v", err)
 		c.RespondError(500, "Failed to retrieve expenses")
 		return
-	}
+	} 
 	c.RespondSuccess(expenses)
 }
 
@@ -179,5 +196,18 @@ func (c *ExpenseController) Remove() {
 // @Failure 400 {object} models.ErrorResponse
 // @router /api/v1/expenses/summary [get]
 func (c *ExpenseController) Summary() {
-	c.RespondSuccess(nil) // implement later
+	userID, ok := c.getUserID()
+	if !ok {
+		return
+	}
+
+	dateFrom := c.GetString("date_from")
+	dateTo := c.GetString("date_to")
+
+	result, err := services.GetSummary(userID, dateFrom, dateTo)
+	if err != nil {
+		c.RespondError(400, err.Error())
+		return
+	}
+	c.RespondSuccess(result)
 }
