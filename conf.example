@@ -1,0 +1,14 @@
+conf/app.conf:
+
+appname = expense-tracker-api
+httpport = 8080
+runmode = dev
+autorender = false
+copyrequestbody = true
+EnableDocs = true
+DirectoryIndex = true
+
+# CSV file paths
+datadir = data
+userfile = users.csv
+expensefile = expenses.csv

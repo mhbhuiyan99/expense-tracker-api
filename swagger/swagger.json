@@ -4,7 +4,9 @@
         "title": "Expense Tracker API",
         "description": "Personal expense tracker REST API\n",
         "version": "1.0.0",
-        "contact": {}
+        "contact": {
+            "email": "mhbhuiyan10023@gmail.com"
+        }
     },
     "basePath": "/api/v1",
     "paths": null,

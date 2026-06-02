@@ -4,6 +4,8 @@ info:
   description: |
     Personal expense tracker REST API
   version: 1.0.0
+  contact:
+    email: mhbhuiyan10023@gmail.com
 basePath: /api/v1
 paths: {}
 definitions:

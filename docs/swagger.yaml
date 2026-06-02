@@ -1,0 +1,336 @@
+swagger: "2.0"
+info:
+  title: Expense Tracker API
+  description: Personal expense tracker REST API
+  version: 1.0.0
+  contact:
+    email: mhbhuiyan10023@gmail.com
+host: localhost:8080
+basePath: /
+schemes:
+  - http
+
+paths:
+  /api/v1/health:
+    get:
+      tags:
+        - Health
+      summary: Health Check
+      description: Returns server status
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      description: Create a new user account
+      operationId: registerUser
+      parameters:
+        - description: Registration details
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/models.RegisterRequest'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      description: Authenticate with email and password
+      operationId: login
+      parameters:
+        - description: Login credentials
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/models.LoginRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+
+  /api/v1/expenses:
+    get:
+      tags:
+        - Expenses
+      summary: List Expenses
+      description: Get all expenses with optional filtering and sorting
+      operationId: listExpenses
+      parameters:
+        - type: integer
+          description: User ID
+          in: header
+          name: X-User-ID
+          required: true
+        - type: string
+          description: Filter by category
+          in: query
+          name: category
+        - type: string
+          description: Filter from date (YYYY-MM-DD)
+          in: query
+          name: date_from
+        - type: string
+          description: Filter to date (YYYY-MM-DD)
+          in: query
+          name: date_to
+        - type: string
+          description: 'Sort by: amount or expense_date'
+          in: query
+          name: sort_by
+        - type: string
+          description: 'Sort order: asc or desc'
+          in: query
+          name: sort_order
+        - type: integer
+          description: Max number of results
+          in: query
+          name: limit
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+    post:
+      tags:
+        - Expenses
+      summary: Create Expense
+      description: Create a new expense for the authenticated user
+      operationId: createExpense
+      parameters:
+        - type: integer
+          description: User ID
+          in: header
+          name: X-User-ID
+          required: true
+        - description: Expense data
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/models.CreateExpenseRequest'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+
+  /api/v1/expenses/summary:
+    get:
+      tags:
+        - Expenses
+      summary: Expense Summary
+      description: Get spending summary for a date range
+      operationId: expenseSummary
+      parameters:
+        - type: integer
+          description: User ID
+          in: header
+          name: X-User-ID
+          required: true
+        - type: string
+          description: Start date (YYYY-MM-DD)
+          in: query
+          name: date_from
+          required: true
+        - type: string
+          description: End date (YYYY-MM-DD)
+          in: query
+          name: date_to
+          required: true
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+
+  /api/v1/expenses/{id}:
+    get:
+      tags:
+        - Expenses
+      summary: Get Expense
+      description: Get a single expense by ID
+      operationId: getExpense
+      parameters:
+        - type: integer
+          description: User ID
+          in: header
+          name: X-User-ID
+          required: true
+        - type: integer
+          description: Expense ID
+          in: path
+          name: id
+          required: true
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+    put:
+      tags:
+        - Expenses
+      summary: Update Expense
+      description: Update an existing expense
+      operationId: updateExpense
+      parameters:
+        - type: integer
+          description: User ID
+          in: header
+          name: X-User-ID
+          required: true
+        - type: integer
+          description: Expense ID
+          in: path
+          name: id
+          required: true
+        - description: Updated fields
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/models.UpdateExpenseRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+    delete:
+      tags:
+        - Expenses
+      summary: Delete Expense
+      description: Delete an expense by ID
+      operationId: deleteExpense
+      parameters:
+        - type: integer
+          description: User ID
+          in: header
+          name: X-User-ID
+          required: true
+        - type: integer
+          description: Expense ID
+          in: path
+          name: id
+          required: true
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+
+definitions:
+  models.CreateExpenseRequest:
+    type: object
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      expense_date:
+        type: string
+      note:
+        type: string
+      title:
+        type: string
+
+  models.UpdateExpenseRequest:
+    type: object
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      expense_date:
+        type: string
+      note:
+        type: string
+      title:
+        type: string
+
+  models.LoginRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+
+  models.RegisterRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+
+  models.SuccessResponse:
+    type: object
+    properties:
+      status:
+        type: string
+      message:
+        type: string
+      data: {}
+
+  models.ErrorResponse:
+    type: object
+    properties:
+      status:
+        type: string
+      code:
+        type: string
+      message:
+        type: string

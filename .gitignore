@@ -1,16 +1,13 @@
-# Binary
 *.exe
 
-# CSV data — runtime generated
-data/
+conf/
 
-# IDE
 .vscode/
 .idea/
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Ignore the compiled binary executable
 expense-tracker-api
+
+*.out
