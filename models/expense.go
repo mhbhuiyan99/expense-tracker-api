@@ -14,15 +14,8 @@ type Expense struct {
 
 // AllowedCategories defines the valid categories for expenses
 var AllowedCategories = []string{
-	"Food",
-	"Transportation",
-	"Entertainment",
-	"Utilities",
-	"Healthcare",
-	"Education",
-	"Housing",
-	"Shopping",
-	"Other",
+    "Food", "Transport", "Housing", "Entertainment",
+    "Shopping", "Healthcare", "Education", "Utilities", "Other",
 }
 
 // IsValidCategory checks if the provided category is valid
